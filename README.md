@@ -12,7 +12,6 @@
   <script>
     // ⚠️ GANTI DENGAN URL WEB APP GOOGLE APPS SCRIPT HASIL DEPLOY ANDA
     const URL_API = "https://script.google.com/macros/s/AKfycbwwYVypvuZufCBXqOpTEhTnWmA4A4NNEIUVYFhh4wsRKmk4VCyBJJ0i3WTLVKz1WpS2/exec";
-    
     // Fungsi jembatan pengganti 'google.script.run' ke Apps Script
     async function panggilAPI(actionName, payloadData = {}) {
       try {
