@@ -1345,34 +1345,24 @@ function startQRScanner() {
   
   const config = { fps: 10, qrbox: { width: 250, height: 250 } };
 
-  // Ambil semua daftar kamera yang ada di perangkat secara real-time
+  // Metode brutal: Kita tidak pakai facingMode, kita langsung ambil list perangkat
   Html5Qrcode.getCameras().then(devices => {
     if (devices && devices.length > 0) {
-      // Cari kamera yang namanya mengandung kata 'back', 'rear', atau 'belakang'
-      let backCamera = devices.find(device => 
-        device.label.toLowerCase().includes("back") || 
-        device.label.toLowerCase().includes("rear") ||
-        device.label.toLowerCase().includes("environment")
-      );
+      // 🚨 Kebanyakan HP menaruh kamera belakang di urutan index 1 (kedua)
+      // Kalau index 1 gak ada/error, dia bakal balik ke index 0 (kamera depan)
+      let cameraId = devices.length > 1 ? devices[1].id : devices[0].id;
       
-      // Kalau ketemu kamera belakang, langsung kunci ID-nya. Kalau gak ketemu (kayak di laptop), pakai kamera pertama yang tersedia.
-      const selectedCameraId = backCamera ? backCamera.id : devices[0].id;
-      
-      console.log("Kamera dipilih ID:", selectedCameraId);
-
-      state.qrScanner.start(selectedCameraId, config, onQrCodeSuccess, onQrCodeError)
-        .then(() => console.log("Kamera sukses aktif lewat ID khusus!"))
+      state.qrScanner.start(cameraId, config, onQrCodeSuccess, onQrCodeError)
+        .then(() => console.log("Kamera aktif dengan ID:", cameraId))
         .catch(err => {
-          console.error("Gagal start kamera via ID:", err);
-          // Jalur cadangan terakhir jika sistem ID error
-          state.qrScanner.start({ facingMode: "environment" }, config, onQrCodeSuccess, onQrCodeError);
+          console.error("Gagal start, mencoba index 0...", err);
+          state.qrScanner.start(devices[0].id, config, onQrCodeSuccess, onQrCodeError);
         });
     } else {
-      alert("Tidak ada hardware kamera yang terdeteksi.");
+      showToast("Kamera tidak ditemukan!", "error");
     }
   }).catch(err => {
-    console.error("Gagal deteksi daftar kamera:", err);
-    // Jalur darurat tanpa deteksi
+    // Kalau getCameras() diblokir, balik ke cara lama yang paling stabil
     state.qrScanner.start({ facingMode: "environment" }, config, onQrCodeSuccess, onQrCodeError);
   });
 }
