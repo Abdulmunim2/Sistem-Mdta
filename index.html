@@ -1271,23 +1271,24 @@ function startQRScanner() {
       }
     }
 
-    function panggilGeminiAI(base64, mime, text) {
-      google.script.run
-        .withSuccessHandler((res) => {
-          document.getElementById('ai-loading-screen').classList.add('hidden');
-          document.getElementById('ai-footer-actions').classList.remove('hidden');
-          if (res && res.santri && res.santri.length > 0) {
-            state.temporaryAISantriStorage = res.santri;
-            tampilkanPreviewTabelAI(res.santri);
-          } else showToast("AI gagal mengenali data nilai.", "error");
-        })
-        .withFailureHandler((err) => {
-          document.getElementById('ai-loading-screen').classList.add('hidden');
-          document.getElementById('ai-footer-actions').classList.remove('hidden');
-          showToast(err.message, "error");
-        })
-        .ekstrasiNilaiDenganAI(base64, mime, text);
-    }
+function panggilGeminiAI(base64, mime, text) {
+  jalankanScriptBackend("ekstrasiNilaiDenganAI", base64, mime, text)
+    .then((res) => {
+      document.getElementById('ai-loading-screen').classList.add('hidden');
+      document.getElementById('ai-footer-actions').classList.remove('hidden');
+      if (res && res.santri && res.santri.length > 0) {
+        state.temporaryAISantriStorage = res.santri;
+        tampilkanPreviewTabelAI(res.santri);
+      } else {
+        showToast("AI gagal mengenali data nilai.", "error");
+      }
+    })
+    .catch((err) => {
+      document.getElementById('ai-loading-screen').classList.add('hidden');
+      document.getElementById('ai-footer-actions').classList.remove('hidden');
+      showToast(err.message, "error");
+    });
+}
 
     function tampilkanPreviewTabelAI(santri) {
       const tbody = document.getElementById('ai-preview-table-body');
