@@ -1345,17 +1345,27 @@ function startQRScanner() {
   
   const config = { fps: 10, qrbox: { width: 250, height: 250 } };
   
-  // Langsung aktifkan kamera depan karena dijalankan dari domain mandiri GitHub Pages
-  state.qrScanner.start({ facingMode: "user" }, config, onQrCodeSuccess, onQrCodeError)
+  // Deteksi secara pintar: Apakah pengguna pakai HP (Mobile/Android/iPhone)?
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  
+  // Jika di HP pakai kamera belakang (environment), jika di laptop pakai kamera depan (user)
+  const posisiKamera = isMobile ? "environment" : "user";
+  
+  console.log("Perangkat terdeteksi:", isMobile ? "HP" : "Laptop/PC");
+  console.log("Menggunakan jalur kamera:", posisiKamera);
+
+  state.qrScanner.start({ facingMode: posisiKamera }, config, onQrCodeSuccess, onQrCodeError)
     .then(function() {
-      console.log("Kamera berhasil aktif di GitHub Pages!");
+      console.log("Kamera sukses aktif!");
     })
     .catch(function(err) {
-      console.log("Kamera depan gagal/tidak ada, mencoba kamera belakang...", err);
-      state.qrScanner.start({ facingMode: "environment" }, config, onQrCodeSuccess, onQrCodeError)
+      console.log("Gagal opsi pertama, mencoba jalur cadangan...", err);
+      // Cadangan: Kalau gagal, balik balik ke posisi kamera sebaliknya
+      const kameraCadangan = posisiKamera === "environment" ? "user" : "environment";
+      state.qrScanner.start({ facingMode: kameraCadangan }, config, onQrCodeSuccess, onQrCodeError)
         .catch(function(err2) {
-          console.error("Semua kamera gagal aktif:", err2);
-          showToast("Kamera gagal diakses. Pastikan izin browser aktif!", "error");
+          console.error("Semua jalur kamera buntu:", err2);
+          showToast("Kamera gagal diakses. Cek izin browser!", "error");
         });
     });
 }
