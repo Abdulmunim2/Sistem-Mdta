@@ -5,10 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sistem Informasi Madrasah</title>
   
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts & Lucide Icons -->
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
   
+  <!-- HTML5 QR Code Scanner Library via CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
 
   <style>
@@ -27,7 +30,7 @@
     }
     input[type=number]::-webkit-inner-spin-button, 
     input[type=number]::-webkit-outer-spin-button { 
-      -webkit-appearance: none;
+      -webkit-appearance: none; 
       margin: 0; 
     }
     input[type=number] { -moz-appearance: textfield; }
@@ -36,7 +39,7 @@
       nav, button, select, input, #global-loader, #toast-container, .tab-buttons-container, .no-print {
         display: none !important;
       }
-      body { background-color: white !important; }
+      body { background-color: #white !important; }
       #print-area, #raport-print-area {
         display: block !important;
         width: 100% !important;
@@ -66,6 +69,7 @@
 </head>
 <body class="min-h-screen flex flex-col text-slate-800">
 
+  <!-- GLOBAL SPINNER LOADER -->
   <div id="global-loader" class="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-xs flex flex-col justify-center items-center hidden">
     <div class="bg-white p-6 rounded-2xl shadow-xl flex flex-col items-center max-w-xs w-full mx-4 border border-slate-100">
       <div class="relative w-12 h-12">
@@ -76,8 +80,10 @@
     </div>
   </div>
 
+  <!-- TOAST NOTIFICATION -->
   <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-3 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
 
+  <!-- CONFIRMATION MODAL CUSTOM -->
   <div id="confirm-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs hidden">
     <div class="bg-white w-full max-w-md rounded-3xl p-6 text-center space-y-4 shadow-xl border border-slate-100 mx-4">
       <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-full flex items-center justify-center mx-auto">
@@ -92,6 +98,7 @@
     </div>
   </div>
 
+  <!-- MODAL KELOLA DATA SANTRI (ADD/EDIT) -->
   <div id="modal-santri" class="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-xs flex justify-center items-center hidden">
     <div class="bg-white rounded-3xl shadow-xl max-w-md w-full mx-4 overflow-hidden border border-slate-100">
       <div class="bg-brand-900 text-white p-5 flex justify-between items-center">
@@ -124,6 +131,7 @@
     </div>
   </div>
 
+  <!-- MODAL JENDELA IMPOR AI GEMINI -->
   <div id="ai-import-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 backdrop-blur-xs p-4 hidden">
     <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl border border-slate-100 overflow-hidden flex flex-col max-h-[90vh]">
       <div class="px-6 py-4 bg-gradient-to-r from-brand-900 to-emerald-950 text-white flex items-center justify-between">
@@ -181,8 +189,13 @@
     </div>
   </div>
 
+
+  <!-- MAIN APP WRAPPER -->
   <main class="flex-grow flex flex-col">
 
+    <!-- ========================================== -->
+    <!-- VIEW 1: LOGIN CARD                         -->
+    <!-- ========================================== -->
     <div id="view-login" class="flex-grow flex items-center justify-center p-4 bg-slate-50 relative overflow-hidden hidden">
       <div class="absolute w-96 h-96 bg-brand-100 rounded-full blur-3xl -top-12 -left-12 opacity-50"></div>
       <div class="bg-white rounded-3xl shadow-xl w-full max-w-md p-8 border border-slate-100 relative z-10">
@@ -209,6 +222,10 @@
       </div>
     </div>
 
+
+    <!-- ========================================== -->
+    <!-- VIEW 2: PORTAL GURU                        -->
+    <!-- ========================================== -->
     <div id="view-guru" class="flex-col min-h-screen bg-slate-50 hidden">
       <nav class="bg-white border-b sticky top-0 z-40 px-4 py-4">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
@@ -230,6 +247,7 @@
           <p class="text-white/80 text-xs mt-1.5">Kelola presensi harian serta isikan penilaian raport siswa.</p>
         </div>
 
+        <!-- TABS GURU -->
         <div class="flex border-b border-slate-200 overflow-x-auto gap-1">
           <button id="guru-tab-btn-presensi" onclick="switchGuruTab('presensi')" class="px-5 py-3 border-b-2 border-brand-600 text-brand-600 font-bold text-xs flex items-center space-x-1.5 whitespace-nowrap">
             <i data-lucide="qr-code" class="w-4 h-4"></i><span>Presensi</span>
@@ -242,6 +260,7 @@
           </button>
         </div>
 
+        <!-- TAB CONTENT: PRESENSI -->
         <div id="guru-tab-content-presensi" class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div class="md:col-span-2 bg-white rounded-3xl p-5 border border-slate-100 shadow-sm flex flex-col items-center justify-center">
             <div class="text-center mb-4">
@@ -270,17 +289,24 @@
           </div>
         </div>
 
+        <!-- TAB CONTENT: KALKULATOR UAS -->
         <div id="guru-tab-content-uas" class="hidden">
           <div id="container-uas-guru"></div>
         </div>
 
+        <!-- TAB CONTENT: KALKULATOR RAPORT -->
         <div id="guru-tab-content-raport" class="hidden">
           <div id="container-raport-guru"></div>
         </div>
       </div>
     </div>
 
+
+    <!-- ========================================== -->
+    <!-- VIEW 3: PORTAL ADMIN                       -->
+    <!-- ========================================== -->
     <div id="view-admin" class="flex-col min-h-screen bg-slate-50 hidden">
+      <!-- Navbar Admin -->
       <nav class="bg-slate-950 text-white sticky top-0 z-40 px-4 py-4">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
           <div class="flex items-center space-x-3">
@@ -306,6 +332,7 @@
           <button onclick="loadRekapAdmin()" class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md">Refresh Laporan</button>
         </div>
 
+        <!-- TABS ADMIN -->
         <div class="flex border-b border-slate-200 overflow-x-auto gap-1">
           <button id="admin-tab-btn-dashboard" onclick="switchAdminTab('dashboard')" class="px-5 py-3 border-b-2 border-brand-600 text-brand-600 font-bold text-xs flex items-center space-x-1.5 whitespace-nowrap">
             <i data-lucide="line-chart" class="w-4.5 h-4.5"></i><span>Dashboard</span>
@@ -324,6 +351,7 @@
           </button>
         </div>
 
+        <!-- TAB CONTENT: DASHBOARD -->
         <div id="tab-content-dashboard" class="space-y-6">
           <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex items-center space-x-3">
@@ -355,6 +383,7 @@
           </div>
         </div>
 
+        <!-- TAB CONTENT: DATABASE SANTRI -->
         <div id="tab-content-santri" class="hidden">
           <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden shadow-sm">
             <div class="p-5 border-b flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -368,6 +397,7 @@
           </div>
         </div>
 
+        <!-- TAB CONTENT: REKAP LAPORAN (BULANAN/SEMESTER) -->
         <div id="tab-content-rekap" class="hidden space-y-4">
           <div class="bg-white p-5 rounded-3xl border border-slate-100 flex flex-wrap items-end gap-3 shadow-sm">
             <div><label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Tipe</label><select id="rekap-jenis" onchange="handleToggleFilterJenis()" class="px-4 py-2 border rounded-xl text-xs font-semibold"><option value="bulanan">Bulanan</option><option value="semesteran">Semesteran</option></select></div>
@@ -382,10 +412,12 @@
           </div>
         </div>
 
+        <!-- TAB CONTENT: KALKULATOR UAS -->
         <div id="tab-content-uas" class="hidden">
           <div id="container-uas-admin"></div>
         </div>
 
+        <!-- TAB CONTENT: KALKULATOR RAPORT -->
         <div id="tab-content-raport" class="hidden">
           <div id="container-raport-admin"></div>
         </div>
@@ -393,6 +425,9 @@
     </div>
   </main>
 
+  <!-- ========================================== -->
+  <!-- TEMPLATE LAYOUT UNTUK KALKULATOR           -->
+  <!-- ========================================== -->
   <template id="template-uas-calculator">
     <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden max-w-lg mx-auto">
       <div class="bg-brand-900 p-5 text-center text-white"><h3 class="text-sm font-bold">Kalkulator Nilai UAS MDTA</h3><p class="text-[10px] text-slate-300 mt-1">Mengonversi lembar jawaban benar menjadi skor resmi 0-100</p></div>
@@ -411,30 +446,35 @@
           <div><label class="text-[10px] font-bold text-slate-500 block text-center">Essay Benar</label><input type="number" class="uas-essay w-full px-2 py-2 border rounded-xl text-center font-bold text-sm" placeholder="0"></div>
           <div><label class="text-[10px] font-bold text-slate-500 block text-center">Setengah Benar</label><input type="number" class="uas-essay-half w-full px-2 py-2 border rounded-xl text-center font-bold text-sm" placeholder="0"></div>
         </div>
-        <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
-          <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Hasil Nilai Akhir:</span>
-          <div class="text-2xl font-black text-brand-600 bg-brand-50 px-4 py-1.5 rounded-2xl border border-brand-100 uas-result">0.0</div>
+        <div class="bg-slate-50 p-4 rounded-2xl text-center border">
+          <span class="text-[10px] text-slate-400 font-bold uppercase block">Nilai Ujian UAS</span>
+          <h2 class="uas-result text-3xl font-extrabold text-slate-800 mt-1">0.0</h2>
         </div>
       </div>
     </div>
   </template>
 
   <template id="template-raport-calculator">
-    <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden w-full mx-auto">
-      <div class="bg-gradient-to-r from-brand-900 to-emerald-950 p-6 text-white flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div><h3 class="text-base font-extrabold tracking-tight">Kalkulator Lembar Nilai Raport</h3><p class="text-xs text-white/75 mt-0.5">Rumus otomatis penggabungan Harian, UAS, dan tingkat absensi santri</p></div>
-        <div class="flex gap-2 no-print"><button class="raport-print-btn bg-white/10 hover:bg-white/20 text-white px-3.5 py-1.5 rounded-xl text-xs font-bold border border-white/10">🖨️ Cetak Raport</button></div>
+    <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+      <div class="bg-slate-950 p-5 text-white flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div><h3 class="text-sm font-bold">Kalkulator Pengolahan Nilai Raport</h3><p class="text-[10px] text-slate-400 mt-0.5">Integrasi pembobotan nilai santri otomatis</p></div>
+        <div class="flex gap-2">
+          <button class="raport-print-btn bg-slate-800 border border-slate-700 px-4 py-2 rounded-xl text-xs font-bold">Cetak Laporan</button>
+          <button class="raport-wa-btn bg-emerald-600 text-white px-4 py-2 rounded-xl text-xs font-bold">Salin Format WA</button>
+        </div>
       </div>
-      <div class="p-5 border-b bg-slate-50/50 flex flex-wrap gap-4 text-xs no-print">
-        <div class="flex items-center gap-1.5"><span>Bobot Harian:</span><input type="number" class="raport-bobot-harian w-12 p-1 border rounded text-center font-bold" value="40">%</div>
-        <div class="flex items-center gap-1.5"><span>Bobot UAS:</span><input type="number" class="raport-bobot-uas w-12 p-1 border rounded text-center font-bold" value="40">%</div>
-        <div class="flex items-center gap-1.5"><span>Bobot Absen:</span><input type="number" class="raport-bobot-kehadiran w-12 p-1 border rounded text-center font-bold" value="20">%</div>
-        <div class="flex items-center gap-1.5"><span>Hitung Absen Dari:</span><select class="raport-tipe-kehadiran p-1 border rounded font-semibold"><option value="score">Skor Input Langsung (0-100)</option><option value="meetings">Sistem Total Pertemuan</option></select></div>
-        <div class="raport-meetings-config-panel hidden flex items-center gap-1.5 bg-brand-50 border border-brand-100 px-2 py-1 rounded-lg"><span>Total Pertemuan:</span><input type="number" class="raport-total-pertemuan w-12 p-1 border rounded text-center font-bold" value="20"></div>
+      <div class="p-5 border-b bg-slate-50/50 grid grid-cols-1 md:grid-cols-4 gap-4 text-xs font-bold text-slate-600">
+        <div><label class="block mb-1.5">Bobot Harian (%)</label><input type="number" class="raport-bobot-harian w-full px-3 py-2 border rounded-xl text-center font-bold text-slate-800" value="40"></div>
+        <div><label class="block mb-1.5">Bobot UAS (%)</label><input type="number" class="raport-bobot-uas w-full px-3 py-2 border rounded-xl text-center font-bold text-slate-800" value="40"></div>
+        <div><label class="block mb-1.5">Bobot Kehadiran (%)</label><input type="number" class="raport-bobot-kehadiran w-full px-3 py-2 border rounded-xl text-center font-bold text-slate-800" value="20"></div>
+        <div><label class="block mb-1.5">Skema Absensi</label><select class="raport-tipe-kehadiran w-full px-3 py-2 border rounded-xl text-slate-800"><option value="direct">Skor Langsung (0-100)</option><option value="meetings">Konversi Hari Kehadiran</option></select></div>
       </div>
-      <div class="p-4">
-        <div class="flex justify-between items-center mb-3 no-print">
-          <h4 class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Tabel Penilaian</h4>
+      <div class="raport-meetings-config-panel hidden p-4 border-b bg-brand-50/50 flex items-center gap-3 text-xs font-bold">
+        <span>Total Hari Pertemuan Semester:</span><input type="number" class="raport-total-pertemuan px-3 py-1.5 w-24 border rounded-xl text-center" value="20">
+      </div>
+      <div class="p-5" id="raport-print-area">
+        <div class="flex justify-between items-center mb-3">
+          <h4 class="font-bold text-xs text-slate-500 uppercase tracking-wider">Tabel Penilaian</h4>
           <button class="raport-add-row-btn bg-brand-600 text-white px-3.5 py-1.5 rounded-xl text-xs font-bold">➕ Tambah Baris</button>
         </div>
         <div class="overflow-x-auto">
@@ -458,71 +498,71 @@
     </div>
   </template>
 
+  <!-- ========================================== -->
+  <!-- CORE JAVASCRIPT STATE & APP FLOW           -->
+  <!-- ========================================== -->
   <script>
-    // URL Web App Google Apps Script lo yang baru
-    const URL_BACKEND_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbwwYVypvuZufCBXqOpTEhTnWmA4A4NNEIUVYFhh4wsRKmk4VCyBJJ0i3WTLVKz1WpS2/exec";
-
-    // JEMBATAN PINTAR GITHUB TO APPS SCRIPT MURNI (Fungsi Inti Fetch)
-    function jalankanScriptBackend(namaFungsi, ...args) {
-      return new Promise((resolve, reject) => {
-        fetch(URL_BACKEND_APPS_SCRIPT, {
-          method: "POST",
-          body: JSON.stringify({
-            fungsi: namaFungsi,
-            argumen: args
-          })
-        })
-        .then(res => res.json())
-        .then(data => {
-          if (data && data.sukses !== undefined) {
-            resolve(data);
-          } else {
-            reject(new Error("Format respons tidak valid atau terjadi kesalahan di server."));
+    // System Mocking System (Jika dpreview di luar Apps Script)
+    if (typeof google === 'undefined') {
+      window.google = {
+        script: {
+          run: {
+            _successHandler: null, _failureHandler: null,
+            withSuccessHandler: function(h) { this._successHandler = h; return this; },
+            withFailureHandler: function(h) { this._failureHandler = h; return this; },
+            prosesLogin: function(u, p) {
+              setTimeout(() => {
+                if (u === 'admin' && p === 'admin123') this._successHandler({ sukses: true, token: "admin-token", nama: "Administrator", role: "Admin", pesan: "Sukses!" });
+                else if (u === 'guru1' && p === 'guru123') this._successHandler({ sukses: true, token: "guru-token", nama: "Ustadz Ahmad Fauzi", role: "Guru", pesan: "Sukses!" });
+                else this._successHandler({ sukses: false, pesan: "Username / password salah!" });
+              }, 500);
+            },
+            validasiAkses: function(t, r) { setTimeout(() => this._successHandler({ valid: true, nama: "Uji Coba Preview" }), 300); },
+            prosesLogout: function(t) { setTimeout(() => this._successHandler({ sukses: true }), 200); },
+            simpanAbsensi: function(p) { setTimeout(() => this._successHandler({ sukses: true, pesan: "Sukses tersimpan!" }), 400); },
+            ambilRekapAbsen: function(t) {
+              setTimeout(() => this._successHandler({
+                sukses: true,
+                statistik: { totalHadirHariIni: 2, totalSakitHariIni: 0, totalIzinHariIni: 1, totalAlpaHariIni: 0, totalAbsensiSeluruh: 3 },
+                daftarAbsensi: [
+                  { tanggal: "23 Jun 2026, 09:12", id_santri: "S-001", nama_santri: "Muhammad Al-Fatih", kelas: "Kelas 7A", status: "Hadir", guru: "Ustadz Ahmad Fauzi" },
+                  { tanggal: "23 Jun 2026, 08:30", id_santri: "S-002", nama_santri: "Aisyah Humaira", kelas: "Kelas 8B", status: "Izin", guru: "Ustadz Ahmad Fauzi" }
+                ],
+                daftarGuru: [{ username: "admin", nama: "Administrator Utama", role: "Admin" }, { username: "guru1", nama: "Ustadz Ahmad Fauzi", role: "Guru" }]
+              }), 500);
+            },
+            ambilSemuaSantri: function(t) {
+              setTimeout(() => this._successHandler({
+                sukses: true,
+                santriList: [
+                  { id_santri: "S-001", nama_santri: "Muhammad Al-Fatih", kelas: "Kelas 7A", no_wa: "81234567890" },
+                  { id_santri: "S-002", nama_santri: "Aisyah Humaira", kelas: "Kelas 8B", no_wa: "82234567891" }
+                ]
+              }), 400);
+            },
+            simpanSantri: function(p) { setTimeout(() => this._successHandler({ sukses: true, pesan: "Sukses!" }), 500); },
+            hapusSantri: function(p) { setTimeout(() => this._successHandler({ sukses: true, pesan: "Sukses!" }), 400); },
+            ambilRekapBulananSemester: function(p) {
+              setTimeout(() => this._successHandler({
+                sukses: true,
+                rekapList: [
+                  { id_santri: "S-001", nama_santri: "Muhammad Al-Fatih", kelas: "Kelas 7A", hadir: 20, sakit: 0, izin: 0, alpa: 0, total: 20, persentase: 100 },
+                  { id_santri: "S-002", nama_santri: "Aisyah Humaira", kelas: "Kelas 8B", hadir: 18, sakit: 1, izin: 1, alpa: 0, total: 20, persentase: 90 }
+                ]
+              }), 600);
+            },
+            ekstrasiNilaiDenganAI: function(b, m, t) {
+              setTimeout(() => this._successHandler({
+                santri: [
+                  { name: "Muhammad Al-Fatih", harian: 90, uas: 85, kehadiran: 19 },
+                  { name: "Aisyah Humaira", harian: 95, uas: 90, kehadiran: 20 }
+                ]
+              }), 1200);
+            }
           }
-        })
-        .catch(err => {
-          console.error("Error Fetch:", err);
-          reject(err);
-        });
-      });
-    }
-
-    // 🔥 HACKING MODE: BAJAK google.script.run BIAR JALAN OTOMATIS TANPA EDIT MANUAL 9 BARIS KODE LAMA
-    window.google = {
-      script: {
-        run: {
-          _successHandler: null,
-          _failureHandler: null,
-          withSuccessHandler: function(handler) {
-            this._successHandler = handler;
-            return this;
-          },
-          withFailureHandler: function(handler) {
-            this._failureHandler = handler;
-            return this;
-          },
-          // Memetakan semua 9 fungsi lama ke dalam jembatan pintar fetch secara dinamis
-          _eksekusiPintar: function(namaFungsi, ...args) {
-            jalankanScriptBackend(namaFungsi, ...args)
-              .then(res => {
-                if (this._successHandler) this._successHandler(res);
-              })
-              .catch(err => {
-                if (this._failureHandler) this._failureHandler(err);
-              });
-          },
-          validasiAkses: function(token, role) { this._eksekusiPintar('validasiAkses', token, role); },
-          prosesLogin: function(u, p) { this._eksekusiPintar('prosesLogin', u, p); },
-          ambilDaftarSantriSesi: function() { this._eksekusiPintar('ambilDaftarSantriSesi'); },
-          simpanPresensiSantri: function(payload) { this._eksekusiPintar('simpanPresensiSantri', payload); },
-          loadRekapAdmin: function() { this._eksekusiPintar('loadRekapAdmin'); },
-          simpanSantri: function(payload) { this._eksekusiPintar('simpanSantri', payload); },
-          hapusSantri: function(payload) { this._eksekusiPintar('hapusSantri', payload); },
-          ambilRekapBulananSemester: function(payload) { this._eksekusiPintar('ambilRekapBulananSemester', payload); },
-          ekstrasiNilaiDenganAI: function(b, m, t) { this._eksekusiPintar('ekstrasiNilaiDenganAI', b, m, t); }
         }
-      }
-    };
+      };
+    }
 
     const state = {
       userToken: null,
@@ -544,48 +584,50 @@
       '40-5':  { maxPg: 40, maxEssay: 5,  bobotPg: 70, bobotEssay: 30 }
     };
 
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", () => {
       lucide.createIcons();
       checkStoredSession();
     });
 
-    function setGlobalLoader(show, text = "Mohon tunggu...") {
+    function showToast(msg, type = 'success') {
+      const container = document.getElementById('toast-container');
+      let icon = 'check-circle';
+      let borderColors = 'bg-white text-emerald-600 border-emerald-100';
+      if (type === 'error') {
+        icon = 'alert-triangle';
+        borderColors = 'bg-white text-rose-600 border-rose-100';
+      }
+      const toast = document.createElement('div');
+      toast.className = `flex items-center p-4 rounded-2xl border shadow-lg transform translate-y-2 opacity-0 transition-all duration-300 pointer-events-auto ${borderColors}`;
+      toast.innerHTML = `<div class="flex-shrink-0 mr-3"><i data-lucide="${icon}" class="w-5 h-5"></i></div><div class="text-xs font-semibold text-slate-800">${msg}</div>`;
+      container.appendChild(toast);
+      lucide.createIcons();
+      setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 50);
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    function setGlobalLoader(show, text = "Menghubungkan ke server...") {
       const loader = document.getElementById('global-loader');
-      const label = document.getElementById('loader-text');
-      if (loader) {
-        if (show) {
-          if (label) label.innerText = text;
-          loader.classList.remove('hidden');
-        } else {
-          loader.classList.add('hidden');
-        }
+      const textElem = document.getElementById('loader-text');
+      if (show) {
+        textElem.innerText = text;
+        loader.classList.remove('hidden');
+      } else {
+        loader.classList.add('hidden');
       }
     }
 
-    function showToast(message, type = 'success') {
-      const container = document.getElementById('toast-container');
-      if (!container) return;
-      const toast = document.createElement('div');
-      toast.className = `p-4 rounded-2xl shadow-xl border flex items-center space-x-3 pointer-events-auto transition duration-300 transform translate-y-2 max-w-sm bg-white text-slate-800 ${type === 'error' ? 'border-rose-100 bg-rose-50/50 text-rose-900' : 'border-emerald-100 bg-emerald-50/50 text-brand-900'}`;
-      const icon = type === 'error' ? 'shield-alert' : 'check-circle';
-      toast.innerHTML = `<i data-lucide="${icon}" class="w-5 h-5 flex-shrink-0 ${type==='error'?'text-rose-600':'text-brand-600'}"></i><span class="text-xs font-bold leading-tight">${message}</span>`;
-      container.appendChild(toast);
-      lucide.createIcons();
-      setTimeout(() => { toast.classList.remove('translate-y-2'); }, 10);
-      setTimeout(() => {
-        toast.className += ' opacity-0 scale-95';
-        setTimeout(() => toast.remove(), 300);
-      }, 4000);
-    }
-
-    function showConfirmModal(text, onConfirm) {
+    function triggerConfirmDialog(text, callback) {
+      document.getElementById('confirm-text').innerText = text;
       const modal = document.getElementById('confirm-modal');
-      const desc = document.getElementById('confirm-text');
-      const btn = document.getElementById('btn-confirm-action');
-      if (!modal) return;
-      desc.innerText = text;
       modal.classList.remove('hidden');
-      btn.onclick = () => { modal.classList.add('hidden'); onConfirm(); };
+      document.getElementById('btn-confirm-action').onclick = () => {
+        callback();
+        closeConfirmModal();
+      };
     }
 
     function closeConfirmModal() {
@@ -596,6 +638,7 @@
       document.getElementById('view-login').classList.add('hidden');
       document.getElementById('view-guru').classList.add('hidden');
       document.getElementById('view-admin').classList.add('hidden');
+      
       stopQRScanner();
 
       if (view === 'login') {
@@ -621,6 +664,7 @@
       const savedToken = sessionStorage.getItem('sis_token');
       const savedNama = sessionStorage.getItem('sis_nama');
       const savedRole = sessionStorage.getItem('sis_role');
+
       if (savedToken && savedNama && savedRole) {
         state.userToken = savedToken;
         state.userNama = savedNama;
@@ -632,11 +676,7 @@
             if (response.valid) routeTo(state.userRole);
             else { clearSession(); routeTo('login'); }
           })
-          .withFailureHandler(() => {
-            setGlobalLoader(false);
-            clearSession();
-            routeTo('login');
-          })
+          .withFailureHandler(() => { setGlobalLoader(false); clearSession(); routeTo('login'); })
           .validasiAkses(state.userToken, state.userRole);
       } else {
         routeTo('login');
@@ -662,21 +702,21 @@
             routeTo(result.role);
           } else showToast(result.pesan, 'error');
         })
-        .withFailureHandler(() => {
-          setGlobalLoader(false);
-          showToast("Sistem error!", 'error');
-        })
+        .withFailureHandler(() => { setGlobalLoader(false); showToast("Sistem error!", 'error'); })
         .prosesLogin(user, pass);
     }
 
     function logout() {
-      setGlobalLoader(true, "Mengakhiri sesi...");
-      setTimeout(() => {
-        clearSession();
-        setGlobalLoader(false);
-        routeTo('login');
-        showToast("Anda berhasil keluar akun.");
-      }, 500);
+      setGlobalLoader(true, "Logout...");
+      google.script.run
+        .withSuccessHandler(() => {
+          setGlobalLoader(false);
+          clearSession();
+          routeTo('login');
+          showToast("Berhasil keluar.");
+        })
+        .withFailureHandler(() => { setGlobalLoader(false); clearSession(); routeTo('login'); })
+        .prosesLogout(state.userToken);
     }
 
     function clearSession() {
@@ -686,77 +726,84 @@
       state.userToken = null;
       state.userNama = '';
       state.userRole = '';
+      state.daftarSantri = [];
+    }
+
+    /* ==========================================================================
+       GURU UTILITIES & CALCULATION SYSTEM
+       ========================================================================== */
+    function switchGuruTab(tab) {
+      state.guruActiveTab = tab;
+      const tabs = ['presensi', 'uas', 'raport'];
+      tabs.forEach(t => {
+        document.getElementById(`guru-tab-content-${t}`).classList.add('hidden');
+        document.getElementById(`guru-tab-btn-${t}`).className = "px-5 py-3 border-b-2 border-transparent text-slate-500 font-bold text-xs flex items-center space-x-1.5 whitespace-nowrap";
+      });
+      document.getElementById(`guru-tab-content-${tab}`).classList.remove('hidden');
+      document.getElementById(`guru-tab-btn-${tab}`).className = "px-5 py-3 border-b-2 border-brand-600 text-brand-600 font-bold text-xs flex items-center space-x-1.5 whitespace-nowrap";
+      
+      stopQRScanner();
+      if (tab === 'presensi') startQRScanner();
+      else if (tab === 'uas') renderUasCalculator('container-uas-guru');
+      else if (tab === 'raport') renderRaportCalculator('container-raport-guru');
     }
 
     function loadDaftarSantriSesi() {
       google.script.run
         .withSuccessHandler((response) => {
           if (response && response.sukses) {
-            state.daftarSantri = response.data || [];
-            updateDatalistAutocomplete(state.daftarSantri);
-            if (state.userRole === 'Admin' && state.adminActiveTab === 'santri') {
-              renderTabelSantri(state.daftarSantri);
-            }
+            state.daftarSantri = response.santriList || [];
+            updateDatalistAutocomplete();
+            if (state.userRole === 'Admin') renderTabelSantri(state.daftarSantri);
           }
         })
-        .ambilDaftarSantriSesi();
+        .ambilSemuaSantri(state.userToken);
     }
 
-    function updateDatalistAutocomplete(arr) {
+    function updateDatalistAutocomplete() {
       const datalist = document.getElementById('daftar-santri-list');
       if (!datalist) return;
       let options = '';
-      arr.forEach(s => {
-        options += `<option value="${s.nama} [${s.id_santri}]">${s.kelas}</option>`;
-      });
+      state.daftarSantri.forEach(s => options += `<option value="${s.nama_santri}">${s.kelas} | ID: ${s.id_santri}</option>`);
       datalist.innerHTML = options;
     }
 
-    // ==================== REKAYASA SISTEM SCANNER QR BARU (MENCEGAH KOTAK HITAM) ====================
-    function startQRScanner() {
-      if (!state.qrScanner) {
-        state.qrScanner = new Html5Qrcode("reader");
-      }
-      const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+function startQRScanner() {
+  if (!state.qrScanner) {
+    state.qrScanner = new Html5Qrcode("reader");
+  }
 
-      Html5Qrcode.getCameras().then(devices => {
-        if (devices && devices.length > 0) {
-          console.log("Kamera ditemukan:", devices);
-          // 🚨 Metode Brutal: Deteksi HP Android/iOS biasanya naruh kamera utama belakang di index terakhir atau kedua (index 1)
-          let cameraId = devices.length > 1 ? devices[1].id : devices[0].id;
-          state.qrScanner.start(cameraId, config, onQrCodeSuccess, onQrCodeError)
-            .then(() => { console.log("Kamera sukses dirender dengan ID:", cameraId); })
-            .catch(err => {
-              console.error("Gagal start pake ID kamera ke-2, mencoba kamera pertama (index 0)...", err);
-              state.qrScanner.start(devices[0].id, config, onQrCodeSuccess, onQrCodeError)
-                .catch(e => alert("Gagal merender video kamera: " + e));
-            });
-        } else {
-          // Fallback paksa jika daftar device kosong (pake string keyword default bawaan library)
-          state.qrScanner.start({ facingMode: "environment" }, config, onQrCodeSuccess, onQrCodeError)
-            .catch(err => alert("Perangkat kamera tidak ditemukan atau diblokir."));
-        }
-      }).catch(err => {
-        // Fallback langsung tebak environment camera
-        state.qrScanner.start({ facingMode: "environment" }, config, onQrCodeSuccess, onQrCodeError)
-          .catch(e => console.error("Kamera gagal diaktifkan total.", e));
-      });
+  const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+
+  // Ambil daftar semua kamera yang ada di perangkat secara real-time
+  Html5Qrcode.getCameras().then(devices => {
+    if (devices && devices.length > 0) {
+      console.log("Kamera ditemukan:", devices);
+      
+      // Ambil kamera urutan pertama (indeks 0), mau di laptop atau HP langsung disikat
+      const cameraId = devices[0].id; 
+      
+      state.qrScanner.start(cameraId, config, onQrCodeSuccess, onQrCodeError)
+        .then(() => {
+          console.log("Kamera sukses dirender dengan ID!");
+        })
+        .catch(err => {
+          console.error("Gagal start pake ID kamera:", err);
+          alert("Gagal merender video kamera.");
+        });
+    } else {
+      alert("Sistem tidak menemukan hardware kamera di perangkat ini.");
     }
+  }).catch(err => {
+    console.error("Gagal mendeteksi daftar kamera:", err);
+    alert("Gagal mendeteksi kamera. Pastikan izin browser benar-benar aktif.");
+  });
+}
 
     function stopQRScanner() {
       if (state.qrScanner && state.qrScanner.isScanning) {
         state.qrScanner.stop().catch(err => console.error("Gagal menghentikan kamera: " + err));
       }
-    }
-
-    function onQrCodeSuccess(decodedText) {
-      console.log("QR Terbaca:", decodedText);
-      // Mencegah spam hit ganda beruntun, kunci suara bip / visual flash di sini
-      prosesAbsenCore(decodedText.trim(), "QR-Scanner");
-    }
-
-    function onQrCodeError(errorMessage) {
-      // Diamkan saja log agar tidak membebani performa browser
     }
 
     function pilihStatusAbsen(status) {
@@ -772,374 +819,67 @@
       }
     }
 
+    let isProcessingScan = false;
+    function onQrCodeSuccess(text) {
+      if (isProcessingScan) return;
+      isProcessingScan = true;
+      playBeep();
+      kirimAbsenKeServer(text, 'Hadir');
+    }
+
+    function onQrCodeError() {}
+
     function prosesManualAbsen() {
-      const inputVal = document.getElementById('manual-santri-id').value;
-      if (!inputVal) return showToast("Pilih santri terlebih dahulu!", "error");
-      let match = inputVal.match(/\[(.*?)\]/);
-      let idSantri = match ? match[1] : inputVal;
-      prosesAbsenCore(idSantri, "Input Manual");
+      const input = document.getElementById('manual-santri-id');
+      const val = input.value.trim();
+      if (!val) { showToast("Pilih santri terlebih dahulu!", "error"); return; }
+      
+      const cocok = state.daftarSantri.find(s => s.nama_santri.toLowerCase() === val.toLowerCase());
+      const id = cocok ? cocok.id_santri : val;
+      kirimAbsenKeServer(id, state.currentAbsenStatus);
+      input.value = '';
     }
 
-    function prosesAbsenCore(idSantri, metode) {
-      setGlobalLoader(true, "Mencatat absensi...");
-      const payload = {
-        token: state.userToken,
-        id_santri: idSantri,
-        status: state.currentAbsenStatus,
-        metode: metode
-      };
-      google.script.run
-        .withSuccessHandler((res) => {
-          setGlobalLoader(false);
-          if (res && res.sukses) {
-            showToast(res.pesan);
-            document.getElementById('manual-santri-id').value = '';
-          } else {
-            showToast(res ? res.pesan : "Gagal memproses presensi", "error");
-          }
-        })
-        .withFailureHandler(() => {
-          setGlobalLoader(false);
-          showToast("Koneksi bermasalah!", "error");
-        })
-        .simpanPresensiSantri(payload);
-    }
-
-    function switchGuruTab(tab) {
-      state.guruActiveTab = tab;
-      ['presensi', 'uas', 'raport'].forEach(t => {
-        const content = document.getElementById(`guru-tab-content-${t}`);
-        if (content) content.classList.add('hidden');
-        const btn = document.getElementById(`guru-tab-btn-${t}`);
-        if (btn) btn.className = "px-5 py-3 border-b-2 border-transparent text-slate-500 font-bold text-xs flex items-center space-x-1.5 whitespace-nowrap";
-      });
-      const activeContent = document.getElementById(`guru-tab-content-${tab}`);
-      if (activeContent) activeContent.classList.remove('hidden');
-      const activeBtn = document.getElementById(`guru-tab-btn-${tab}`);
-      if (activeBtn) activeBtn.className = "px-5 py-3 border-b-2 border-brand-600 text-brand-600 font-bold text-xs flex items-center space-x-1.5 whitespace-nowrap";
-
-      if (tab === 'presensi') startQRScanner();
-      else stopQRScanner();
-
-      if (tab === 'uas') renderUasCalculator('container-uas-guru');
-      if (tab === 'raport') renderRaportCalculator('container-raport-guru');
-    }
-
-    function switchAdminTab(tab) {
-      state.adminActiveTab = tab;
-      ['dashboard', 'santri', 'rekap', 'uas', 'raport'].forEach(t => {
-        const elContent = document.getElementById(`tab-content-${t}`);
-        if (elContent) elContent.classList.add('hidden');
-        const elBtn = document.getElementById(`admin-tab-btn-${t}`);
-        if (elBtn) elBtn.className = "px-5 py-3 border-b-2 border-transparent text-slate-500 font-bold text-xs flex items-center space-x-1.5 whitespace-nowrap";
-      });
-      const elActiveContent = document.getElementById(`tab-content-${tab}`);
-      if (elActiveContent) elActiveContent.classList.remove('hidden');
-      const elActiveBtn = document.getElementById(`admin-tab-btn-${tab}`);
-      if (elActiveBtn) elActiveBtn.className = "px-5 py-3 border-b-2 border-brand-600 text-brand-600 font-bold text-xs flex items-center space-x-1.5 whitespace-nowrap";
-
-      if (tab === 'dashboard') loadRekapAdmin();
-      else if (tab === 'santri') renderTabelSantri(state.daftarSantri);
-      else if (tab === 'uas') renderUasCalculator('container-uas-admin');
-      else if (tab === 'raport') renderRaportCalculator('container-raport-admin');
-    }
-
-    function loadRekapAdmin() {
-      const tbody = document.getElementById('table-absensi-body');
-      tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center">Memuat data...</td></tr>`;
+    function kirimAbsenKeServer(id, status) {
+      setGlobalLoader(true, `Menyimpan presensi...`);
       google.script.run
         .withSuccessHandler((response) => {
+          setGlobalLoader(false);
+          setTimeout(() => isProcessingScan = false, 2000);
           if (response && response.sukses) {
-            document.getElementById('stat-hadir').innerText = response.statistik.totalHadirHariIni;
-            document.getElementById('stat-sakit').innerText = response.statistik.totalSakitHariIni;
-            document.getElementById('stat-izin').innerText = response.statistik.totalIzinHariIni;
-            document.getElementById('stat-alpa').innerText = response.statistik.totalAlpaHariIni;
-            document.getElementById('stat-total').innerText = `${response.statistik.totalAbsensiSeluruh} Rekaman`;
-            
-            let rows = '';
-            response.daftarAbsensi.forEach(item => {
-              rows += `<tr><td class="p-4">${item.tanggal}</td><td class="p-4 font-bold">${item.nama_santri}</td><td class="p-4 font-semibold">${item.kelas}</td><td class="p-4"><span class="px-2 py-0.5 rounded-full font-bold text-[10px] border">${item.status}</span></td><td class="p-4">${item.guru}</td></tr>`;
-            });
-            tbody.innerHTML = rows || `<tr><td colspan="5" class="p-4 text-center text-slate-400">Belum ada riwayat hari ini.</td></tr>`;
-
-            const listUsers = document.getElementById('list-user-body');
-            let uRows = '';
-            response.daftarGuru.forEach(u => {
-              uRows += `<div class="py-2.5 flex justify-between items-center text-xs"><div class="font-bold">${u.nama}</div><div class="px-2 py-0.5 bg-slate-100 rounded-md font-bold text-slate-500 uppercase">${u.role}</div></div>`;
-            });
-            listUsers.innerHTML = uRows || `<p class="text-xs text-slate-400 p-2 text-center">Tidak ada daftar guru.</p>`;
-          }
+            showToast(response.pesan);
+            if (state.userRole === 'Admin') loadRekapAdmin();
+          } else showToast(response ? response.pesan : "Gagal", 'error');
         })
-        .loadRekapAdmin();
+        .withFailureHandler(() => { setGlobalLoader(false); isProcessingScan = false; showToast("Server Error", 'error'); })
+        .simpanAbsensi({ token: state.userToken, idSantri: id, status: status });
     }
 
-    function renderTabelSantri(arr) {
-      const tbody = document.getElementById('table-santri-body');
-      if (!tbody) return;
-      let rows = '';
-      arr.forEach(s => {
-        rows += `<tr>
-          <td class="p-4 font-extrabold uppercase text-slate-900">${s.id_santri}</td>
-          <td class="p-4 font-bold">${s.nama}</td>
-          <td class="p-4 font-semibold text-brand-700">${s.kelas}</td>
-          <td class="p-4 text-slate-500 font-medium">${s.no_wa}</td>
-          <td class="p-4 text-center space-x-1 whitespace-nowrap">
-            <button onclick="openEditSantriModal('${s.id_santri}','${s.nama}','${s.kelas}','${s.no_wa}')" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-lg text-[11px] font-bold text-slate-700">Edit</button>
-            <button onclick="showConfirmModal('Hapus santri ${s.nama} dari database?', () => handleHapusSantri('${s.id_santri}'))" class="px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 rounded-lg text-[11px] font-bold text-rose-600">Hapus</button>
-          </td>
-        </tr>`;
-      });
-      tbody.innerHTML = rows || `<tr><td colspan="5" class="p-4 text-center text-slate-400">Database kosong atau santri tidak ditemukan.</td></tr>`;
+    function playBeep() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+        gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.1);
+      } catch (e) {}
     }
 
-    function filterTabelSantri(keyword) {
-      const filtered = state.daftarSantri.filter(s => 
-        s.nama.toLowerCase().includes(keyword.toLowerCase()) || 
-        s.id_santri.toLowerCase().includes(keyword.toLowerCase()) || 
-        s.kelas.toLowerCase().includes(keyword.toLowerCase())
-      );
-      renderTabelSantri(filtered);
-    }
-
-    function openTambahSantriModal() {
-      document.getElementById('form-santri').reset();
-      document.getElementById('santri-form-action').value = 'tambah';
-      document.getElementById('santri-id').disabled = false;
-      document.getElementById('modal-title').innerText = "Tambah Data Santri";
-      document.getElementById('modal-santri').classList.remove('hidden');
-    }
-
-    function openEditSantriModal(id, nama, kelas, wa) {
-      document.getElementById('santri-form-action').value = 'edit';
-      const inputId = document.getElementById('santri-id');
-      inputId.value = id;
-      inputId.disabled = true; // ID tidak boleh diedit demi integritas database
-      document.getElementById('santri-nama').value = nama;
-      document.getElementById('santri-kelas').value = kelas;
-      document.getElementById('santri-wa').value = wa;
-      document.getElementById('modal-title').innerText = "Modifikasi Data Santri";
-      document.getElementById('modal-santri').classList.remove('hidden');
-    }
-
-    function closeSantriModal() {
-      document.getElementById('modal-santri').classList.add('hidden');
-    }
-
-    function handleSimpanSantri(e) {
-      e.preventDefault();
-      setGlobalLoader(true, "Menyimpan perubahan...");
-      const payload = {
-        token: state.userToken,
-        aksi: document.getElementById('santri-form-action').value,
-        id_santri: document.getElementById('santri-id').value.toUpperCase().trim(),
-        nama: document.getElementById('santri-nama').value.trim(),
-        kelas: document.getElementById('santri-kelas').value.trim(),
-        no_wa: document.getElementById('santri-wa').value.trim()
-      };
-      google.script.run
-        .withSuccessHandler((res) => {
-          setGlobalLoader(false);
-          if (res && res.sukses) {
-            showToast(res.pesan);
-            closeSantriModal();
-            loadDaftarSantriSesi();
-          } else showToast(res ? res.pesan : "Gagal", "error");
-        })
-        .simpanSantri(payload);
-    }
-
-    function handleHapusSantri(id) {
-      setGlobalLoader(true, "Menghapus...");
-      google.script.run
-        .withSuccessHandler((res) => {
-          setGlobalLoader(false);
-          if (res && res.sukses) {
-            showToast(res.pesan);
-            loadDaftarSantriSesi();
-          } else showToast(res ? res.pesan : "Gagal", "error");
-        })
-        .hapusSantri({ token: state.userToken, id_santri: id });
-    }
-
-    function handleToggleFilterJenis() {
-      const j = document.getElementById('rekap-jenis').value;
-      if (j === 'bulanan') {
-        document.getElementById('container-rekap-bulan').classList.remove('hidden');
-        document.getElementById('container-rekap-semester').classList.add('hidden');
-      } else {
-        document.getElementById('container-rekap-bulan').classList.add('hidden');
-        document.getElementById('container-rekap-semester').classList.remove('hidden');
-      }
-    }
-
-    function prosesGenerateLaporan() {
-      const jenis = document.getElementById('rekap-jenis').value;
-      const bulan = document.getElementById('rekap-bulan').value;
-      const semester = document.getElementById('rekap-semester').value;
-      const tahun = document.getElementById('rekap-tahun').value;
-      const nilai = jenis === 'bulanan' ? bulan : semester;
-
-      document.getElementById('rekap-title-render').innerText = `Rekap Presensi ${jenis === 'bulanan' ? 'Bulan Ke-' + (parseInt(bulan)+1) : 'Semester ' + semester.toUpperCase()} T.A ${tahun}`;
-      const tbody = document.getElementById('table-rekap-body');
-      tbody.innerHTML = `<tr><td colspan="9" class="p-4 text-center">Menyusun Laporan...</td></tr>`;
-      setGlobalLoader(true, "Memuat laporan...");
-
-      google.script.run
-        .withSuccessHandler((res) => {
-          setGlobalLoader(false);
-          if (res && res.sukses) {
-            state.currentRekapData = res.rekapList || [];
-            let rows = '';
-            state.currentRekapData.forEach(r => {
-              rows += `<tr>
-                <td class="p-4 font-bold">${r.id_santri}</td>
-                <td class="p-4 font-bold text-slate-800">${r.nama_santri}</td>
-                <td class="p-4 font-semibold text-slate-500">${r.kelas}</td>
-                <td class="p-4 text-center font-bold text-emerald-600">${r.hadir}</td>
-                <td class="p-4 text-center font-bold text-amber-500">${r.sakit}</td>
-                <td class="p-4 text-center font-bold text-indigo-600">${r.izin}</td>
-                <td class="p-4 text-center font-bold text-rose-600">${r.alpa}</td>
-                <td class="p-4 text-center font-extrabold bg-slate-50">${r.total}</td>
-                <td class="p-4 text-center font-black text-brand-600 bg-brand-50/40">${r.persentase}%</td>
-              </tr>`;
-            });
-            tbody.innerHTML = rows || `<tr><td colspan="9" class="p-4 text-center">Laporan kosong.</td></tr>`;
-          } else showToast("Gagal mengambil rekap!", "error");
-        })
-        .ambilRekapBulananSemester({ token: state.userToken, jenis: jenis, target: nilai, tahun: tahun });
-    }
-
-    function eksporLaporanKeCSV() {
-      if (state.currentRekapData.length === 0) return showToast("Tidak ada data untuk diekspor", "error");
-      let csv = 'ID Santri,Nama Santri,Kelas,Hadir,Sakit,Izin,Alpa,Total,Persentase\n';
-      state.currentRekapData.forEach(r => {
-        csv += `"${r.id_santri}","${r.nama_santri}","${r.kelas}",${r.hadir},${r.sakit},${r.izin},${r.alpa},${r.total},${r.persentase}\n`;
-      });
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.setAttribute("href", url);
-      link.setAttribute("download", `Laporan_SIM_Madrasah_${new Date().toISOString().slice(0,10)}.csv`);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-
-    function openAIModal() {
-      document.getElementById('ai-file-input').value = '';
-      document.getElementById('ai-text-input').value = '';
-      document.getElementById('ai-file-status').innerText = 'Klik atau seret berkas Anda di sini';
-      document.getElementById('ai-preview-container').classList.add('hidden');
-      document.getElementById('ai-loading-screen').classList.add('hidden');
-      document.getElementById('ai-footer-actions').classList.remove('hidden');
-      document.getElementById('ai-import-modal').classList.remove('hidden');
-      state.temporaryAISantriStorage = [];
-    }
-
-    function closeAIModal() {
-      document.getElementById('ai-import-modal').classList.add('hidden');
-    }
-
-    function handleAIFileSelection() {
-      const fileInput = document.getElementById('ai-file-input');
-      const status = document.getElementById('ai-file-status');
-      if (fileInput.files.length > 0) {
-        status.innerText = `📄 ${fileInput.files[0].name} siap dianalisis.`;
-      }
-    }
-
-    function mulaiProsesAnalisisAI() {
-      const fileInput = document.getElementById('ai-file-input');
-      const textInput = document.getElementById('ai-text-input').value.trim();
-
-      if (fileInput.files.length === 0 && !textInput) {
-        return showToast("Mohon unggah file atau ketik teks nilai mentah dulu!", "error");
-      }
-
-      document.getElementById('ai-loading-screen').classList.remove('hidden');
-      document.getElementById('ai-footer-actions').classList.add('hidden');
-      document.getElementById('ai-preview-container').classList.add('hidden');
-
-      if (fileInput.files.length > 0) {
-        const file = fileInput.files[0];
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const base64 = e.target.result.split(',')[1];
-          panggilGeminiAI(base64, file.type, textInput);
-        };
-        reader.readAsDataURL(file);
-      } else {
-        panggilGeminiAI(null, null, textInput);
-      }
-    }
-
-    function panggilGeminiAI(base64, mime, text) {
-      jalankanScriptBackend("ekstrasiNilaiDenganAI", base64, mime, text)
-        .then((res) => {
-          document.getElementById('ai-loading-screen').classList.add('hidden');
-          document.getElementById('ai-footer-actions').classList.remove('hidden');
-          if (res && res.santri && res.santri.length > 0) {
-            state.temporaryAISantriStorage = res.santri;
-            tampilkanPreviewTabelAI(res.santri);
-          } else {
-            showToast("AI gagal mengenali data nilai.", "error");
-          }
-        })
-        .catch((err) => {
-          document.getElementById('ai-loading-screen').classList.add('hidden');
-          document.getElementById('ai-footer-actions').classList.remove('hidden');
-          showToast(err.message, "error");
-        });
-    }
-
-    function tampilkanPreviewTabelAI(santri) {
-      const tbody = document.getElementById('ai-preview-table-body');
-      let rows = '';
-      santri.forEach(s => {
-        rows += `<tr>
-          <td class="p-3 font-bold text-slate-800">${s.name}</td>
-          <td class="p-3 text-center font-bold">${s.harian || 0}</td>
-          <td class="p-3 text-center font-bold">${s.uas || 0}</td>
-          <td class="p-3 text-center font-medium text-slate-500">${s.kehadiran || 0}</td>
-        </tr>`;
-      });
-      tbody.innerHTML = rows;
-      document.getElementById('ai-preview-container').classList.remove('hidden');
-    }
-
-    function salurkanDataAI(mode) {
-      if (state.temporaryAISantriStorage.length === 0) return;
-      const activeContainerId = state.userRole === 'Admin' ? 'container-raport-admin' : 'container-raport-guru';
-      const container = document.getElementById(activeContainerId);
-      if (!container) return;
-      
-      const tbody = container.querySelector('.raport-table-body');
-      if (!tbody) return;
-
-      if (mode === 'overwrite') {
-        tbody.innerHTML = '';
-        window._currentCalculatedStudentsList = [];
-      }
-
-      state.temporaryAISantriStorage.forEach(s => {
-        if (typeof window._triggerAddRaportRowManual === 'function') {
-          window._triggerAddRaportRowManual(s.name, s.harian, s.uas, s.kehadiran);
-        }
-      });
-
-      closeAIModal();
-      showToast(`Berhasil menyalurkan ${state.temporaryAISantriStorage.length} data santri dari AI!`);
-    }
-
-    // ==================== ENGINE KALKULATOR MODULAR ====================
+    /* ==========================================================================
+       PENGULANGAN & DYNAMIC RENDERER UNTUK KALKULATOR
+       ========================================================================== */
     function renderUasCalculator(containerId) {
       const container = document.getElementById(containerId);
       if (!container) return;
       const temp = document.getElementById('template-uas-calculator');
       container.innerHTML = '';
       container.appendChild(temp.content.cloneNode(true));
-      const card = container.firstElementChild;
 
+      const card = container.firstElementChild;
       const skema = card.querySelector('.uas-skema');
       const pg = card.querySelector('.uas-pg');
       const essay = card.querySelector('.uas-essay');
@@ -1151,7 +891,7 @@
         let pVal = Math.min(conf.maxPg, parseInt(pg.value) || 0);
         let eVal = parseInt(essay.value) || 0;
         let ehVal = parseInt(essayHalf.value) || 0;
-
+        
         pg.value = pVal;
         if (eVal + ehVal > conf.maxEssay) {
           eVal = conf.maxEssay;
@@ -1175,8 +915,8 @@
       const temp = document.getElementById('template-raport-calculator');
       container.innerHTML = '';
       container.appendChild(temp.content.cloneNode(true));
-      const card = container.firstElementChild;
 
+      const card = container.firstElementChild;
       const bh = card.querySelector('.raport-bobot-harian');
       const bu = card.querySelector('.raport-bobot-uas');
       const bk = card.querySelector('.raport-bobot-kehadiran');
@@ -1185,45 +925,43 @@
       const tp = card.querySelector('.raport-total-pertemuan');
       const headerText = card.querySelector('.header-kehadiran-txt');
       const tbody = card.querySelector('.raport-table-body');
-
+      
       let studentsList = [];
 
-      function getGrade(score) {
-        if (score >= 90) return { g: 'A', d: 'Istimewa', c: 'text-emerald-600 bg-emerald-50 border-emerald-100' };
-        if (score >= 80) return { g: 'B', d: 'Baik', c: 'text-brand-700 bg-brand-50 border-brand-100' };
-        if (score >= 70) return { g: 'C', d: 'Cukup', c: 'text-indigo-600 bg-indigo-50 border-indigo-100' };
-        return { g: 'D', d: 'Kurang', c: 'text-rose-600 bg-rose-50 border-rose-100' };
+      function getGradeLetter(score) {
+        if (score >= 85) return { grade: 'A', desc: 'Sangat Baik', css: 'bg-emerald-50 text-emerald-700' };
+        if (score >= 75) return { grade: 'B', desc: 'Baik', css: 'bg-teal-50 text-teal-700' };
+        if (score >= 65) return { grade: 'C', desc: 'Cukup', css: 'bg-amber-50 text-amber-700' };
+        return { grade: 'D', desc: 'Kurang', css: 'bg-rose-50 text-rose-700' };
       }
 
-      function hitungBaris(index) {
-        const s = studentsList[index];
+      function hitungBaris(idx) {
+        const s = studentsList[idx];
         if (!s) return;
-        const wHarian = parseFloat(bh.value) || 0;
-        const wUas = parseFloat(bu.value) || 0;
-        const wAbsen = parseFloat(bk.value) || 0;
+        const hVal = parseFloat(s.inHarian.value) || 0;
+        const uVal = parseFloat(s.inUas.value) || 0;
+        const kVal = parseFloat(s.inKehadiran.value) || 0;
 
-        const vHarian = parseFloat(s.inHarian.value) || 0;
-        const vUas = parseFloat(s.inUas.value) || 0;
-        let vAbsenInput = parseFloat(s.inKehadiran.value) || 0;
-
-        let scoreAbsen = vAbsenInput;
+        let kSkor = kVal;
         if (tk.value === 'meetings') {
-          const totalMeet = parseFloat(tp.value) || 1;
-          scoreAbsen = Math.min(100, (vAbsenInput / totalMeet) * 100);
+          const tot = parseInt(tp.value) || 20;
+          kSkor = tot > 0 ? Math.min(100, (kVal / tot) * 100) : 0;
         }
 
-        const totalAkhir = ((vHarian * wHarian) + (vUas * wUas) + (scoreAbsen * wAbsen)) / 100;
-        s.outAkhir.innerText = totalAkhir.toFixed(1);
+        const bHarian = (parseInt(bh.value) || 0) / 100;
+        const bUas = (parseInt(bu.value) || 0) / 100;
+        const bKehadiran = (parseInt(bk.value) || 0) / 100;
 
-        const meta = getGrade(totalAkhir);
-        s.outGrade.innerText = meta.g;
-        s.outGrade.className = `r-grade font-black px-2 py-0.5 rounded-md border text-[11px] ${meta.c}`;
-        s.outDesc.innerText = meta.meta || meta.d;
+        const akhir = (hVal * bHarian) + (uVal * bUas) + (kSkor * bKehadiran);
+        s.outAkhir.innerText = akhir.toFixed(1);
+        
+        const info = getGradeLetter(akhir);
+        s.outGrade.innerText = info.grade;
+        s.outGrade.className = `px-2 py-1 font-bold rounded-lg text-center ${info.css}`;
+        s.outDesc.innerText = info.desc;
       }
 
-      function hitungSemua() {
-        studentsList.forEach((_, idx) => hitungBaris(idx));
-      }
+      function hitungSemua() { studentsList.forEach((_, idx) => hitungBaris(idx)); }
 
       function tambahBaris(nama = '', h = '', u = '', k = '') {
         const row = document.createElement('tr');
@@ -1249,46 +987,387 @@
           outGrade: row.querySelector('.r-grade'),
           outDesc: row.querySelector('.r-desc')
         };
-
         sData.inNama.value = nama;
         studentsList.push(sData);
 
         sData.inHarian.addEventListener('input', () => hitungBaris(idx));
         sData.inUas.addEventListener('input', () => hitungBaris(idx));
         sData.inKehadiran.addEventListener('input', () => hitungBaris(idx));
-
         row.querySelector('.r-del').onclick = () => {
           row.remove();
           studentsList = studentsList.filter(s => s !== sData);
           hitungSemua();
         };
-
         hitungBaris(idx);
       }
 
       tk.onchange = () => {
-        if (tk.value === 'meetings') {
-          panel.classList.remove('hidden');
-          headerText.innerText = "Kehadiran (Hari)";
-        } else {
-          panel.classList.add('hidden');
-          headerText.innerText = "N. Kehadiran";
-        }
+        if (tk.value === 'meetings') { panel.classList.remove('hidden'); headerText.innerText = "Kehadiran (Hari)"; }
+        else { panel.classList.add('hidden'); headerText.innerText = "N. Kehadiran"; }
         hitungSemua();
       };
 
-      [bh, bu, bk, tp].forEach(el => el.addEventListener('input', hitungSemua));
       card.querySelector('.raport-add-row-btn').onclick = () => tambahBaris();
       card.querySelector('.raport-print-btn').onclick = () => window.print();
+      
+      card.querySelector('.raport-wa-btn').onclick = () => {
+        let text = `*LAPORAN NILAI RAPORT MADRASAH*\n`;
+        studentsList.forEach((s, idx) => {
+          text += `\n${idx+1}. *${s.inNama.value}* -> Nilai Akhir: ${s.outAkhir.innerText} (${s.outGrade.innerText} - ${s.outDesc.innerText})`;
+        });
+        const temp = document.createElement('textarea'); temp.value = text; document.body.appendChild(temp); temp.select(); document.execCommand('copy'); document.body.removeChild(temp);
+        showToast("Laporan WA disalin!");
+      };
 
-      // Ekspos fungsi tambah baris secara global agar modul AI bisa menyuntikkan data otomatis
-      window._triggerAddRaportRowManual = tambahBaris;
-      window._currentCalculatedStudentsList = studentsList;
+      // Tautkan asisten AI ke dalam kalkulator instan
+      window.bukaJendelaAIKalkulator = function() {
+        window.targetTableAppendCallback = function(parsedSantri) {
+          parsedSantri.forEach(s => tambahBaris(s.name || s.nama, s.harian, s.uas, s.kehadiran));
+        };
+        window.targetTableOverwriteCallback = function(parsedSantri) {
+          tbody.innerHTML = '';
+          studentsList = [];
+          parsedSantri.forEach(s => tambahBaris(s.name || s.nama, s.harian, s.uas, s.kehadiran));
+        };
+        openAIModal();
+      };
 
-      // Render default 2 baris awal kosong agar tabel tampak estetis
-      tambahBaris();
-      tambahBaris();
+      // Injeksi tombol Impor AI ke dekat tombol tambah baris
+      const wrapBtn = card.querySelector('.raport-add-row-btn').parentElement;
+      const aiBtn = document.createElement('button');
+      aiBtn.className = "mr-2 bg-purple-50 text-purple-800 border border-purple-200 px-3 py-1.5 rounded-xl text-xs font-bold";
+      aiBtn.innerText = "✨ Impor AI";
+      aiBtn.onclick = window.bukaJendelaAIKalkulator;
+      wrapBtn.insertBefore(aiBtn, card.querySelector('.raport-add-row-btn'));
+
+      // Muat daftar siswa aktif bawaan
+      if (state.daftarSantri.length > 0) state.daftarSantri.forEach(s => tambahBaris(s.nama_santri));
+      else tambahBaris("Muhammad Al-Fatih");
     }
+
+    /* ==========================================================================
+       PORTAL ADMIN & MANAGEMENT DATA
+       ========================================================================== */
+    function switchAdminTab(tab) {
+      state.adminActiveTab = tab;
+      const tabs = ['dashboard', 'santri', 'rekap', 'uas', 'raport'];
+      tabs.forEach(t => {
+        const elContent = document.getElementById(`tab-content-${t}`);
+        if (elContent) elContent.classList.add('hidden');
+        
+        const elBtn = document.getElementById(`admin-tab-btn-${t}`);
+        if (elBtn) elBtn.className = "px-5 py-3 border-b-2 border-transparent text-slate-500 font-bold text-xs flex items-center space-x-1.5 whitespace-nowrap";
+      });
+      
+      const elActiveContent = document.getElementById(`tab-content-${tab}`);
+      if (elActiveContent) elActiveContent.classList.remove('hidden');
+      
+      const elActiveBtn = document.getElementById(`admin-tab-btn-${tab}`);
+      if (elActiveBtn) elActiveBtn.className = "px-5 py-3 border-b-2 border-brand-600 text-brand-600 font-bold text-xs flex items-center space-x-1.5 whitespace-nowrap";
+
+      if (tab === 'dashboard') loadRekapAdmin();
+      else if (tab === 'santri') renderTabelSantri(state.daftarSantri);
+      else if (tab === 'uas') renderUasCalculator('container-uas-admin');
+      else if (tab === 'raport') renderRaportCalculator('container-raport-admin');
+    }
+
+    function loadRekapAdmin() {
+      const tbody = document.getElementById('table-absensi-body');
+      tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center">Memuat data...</td></tr>`;
+      google.script.run
+        .withSuccessHandler((response) => {
+          if (response && response.sukses) {
+            document.getElementById('stat-hadir').innerText = response.statistik.totalHadirHariIni;
+            document.getElementById('stat-sakit').innerText = response.statistik.totalSakitHariIni;
+            document.getElementById('stat-izin').innerText = response.statistik.totalIzinHariIni;
+            document.getElementById('stat-alpa').innerText = response.statistik.totalAlpaHariIni;
+            document.getElementById('stat-total').innerText = `${response.statistik.totalAbsensiSeluruh} Rekaman`;
+            
+            // Riwayat Presensi
+            let rows = '';
+            response.daftarAbsensi.forEach(item => {
+              rows += `<tr><td class="p-4">${item.tanggal}</td><td class="p-4 font-bold">${item.nama_santri}</td><td class="p-4 font-semibold">${item.kelas}</td><td class="p-4"><span class="px-2 py-0.5 rounded-full font-bold text-[10px] border">${item.status}</span></td><td class="p-4">${item.guru}</td></tr>`;
+            });
+            tbody.innerHTML = rows || `<tr><td colspan="5" class="p-4 text-center text-slate-400">Belum ada riwayat hari ini.</td></tr>`;
+
+            // Daftar Guru
+            const listUsers = document.getElementById('list-user-body');
+            let uRows = '';
+            response.daftarGuru.forEach(u => {
+              uRows += `<div class="py-2.5 flex justify-between items-center text-xs"><div class="font-bold">${u.nama}</div><div class="px-2 py-0.5 bg-slate-100 rounded-md font-bold text-slate-500 uppercase">${u.role}</div></div>`;
+            });
+            listUsers.innerHTML = uRows;
+          }
+        })
+        .ambilRekapAbsen(state.userToken);
+    }
+
+    function renderTabelSantri(data) {
+      const tbody = document.getElementById('table-santri-body');
+      if (!tbody) return;
+      let rows = '';
+      data.forEach(s => {
+        rows += `<tr class="hover:bg-slate-50"><td class="p-4 font-bold">${s.id_santri}</td><td class="p-4 font-bold text-slate-950">${s.nama_santri}</td><td class="p-4 font-bold">${s.kelas}</td><td class="p-4 font-semibold text-emerald-600">+62 ${s.no_wa}</td><td class="p-4 text-center"><button onclick="openEditSantriModal('${s.id_santri}')" class="text-brand-600 font-bold mr-2">Edit</button><button onclick="triggerConfirmDialog('Hapus santri ${s.nama_santri}?', () => handleHapusSantri('${s.id_santri}'))" class="text-rose-600 font-bold">Hapus</button></td></tr>`;
+      });
+      tbody.innerHTML = rows || `<tr><td colspan="5" class="p-4 text-center">Database santri kosong.</td></tr>`;
+    }
+
+    function filterTabelSantri(val) {
+      const filtered = state.daftarSantri.filter(s => s.nama_santri.toLowerCase().includes(val.toLowerCase()) || s.kelas.toLowerCase().includes(val.toLowerCase()));
+      renderTabelSantri(filtered);
+    }
+
+    function openTambahSantriModal() {
+      document.getElementById('modal-title').innerText = "Tambah Data Santri";
+      document.getElementById('santri-form-action').value = "tambah";
+      document.getElementById('form-santri').reset();
+      document.getElementById('santri-id').removeAttribute('readonly');
+      document.getElementById('modal-santri').classList.remove('hidden');
+    }
+
+    function openEditSantriModal(id) {
+      const s = state.daftarSantri.find(item => item.id_santri === id);
+      if (!s) return;
+      document.getElementById('modal-title').innerText = "Edit Data Santri";
+      document.getElementById('santri-form-action').value = "edit";
+      document.getElementById('santri-id').value = s.id_santri;
+      document.getElementById('santri-id').setAttribute('readonly', 'true');
+      document.getElementById('santri-nama').value = s.nama_santri;
+      document.getElementById('santri-kelas').value = s.kelas;
+      document.getElementById('santri-wa').value = s.no_wa;
+      document.getElementById('modal-santri').classList.remove('hidden');
+    }
+
+    function closeSantriModal() { document.getElementById('modal-santri').classList.add('hidden'); }
+
+    function handleSimpanSantri(event) {
+      event.preventDefault();
+      setGlobalLoader(true, "Menyimpan data...");
+      const payload = {
+        token: state.userToken,
+        action: document.getElementById('santri-form-action').value,
+        id_santri: document.getElementById('santri-id').value,
+        nama_santri: document.getElementById('santri-nama').value,
+        kelas: document.getElementById('santri-kelas').value,
+        no_wa: document.getElementById('santri-wa').value
+      };
+      google.script.run
+        .withSuccessHandler((res) => {
+          setGlobalLoader(false);
+          if (res && res.sukses) { closeSantriModal(); showToast(res.pesan); loadDaftarSantriSesi(); }
+          else showToast(res ? res.pesan : "Gagal", "error");
+        })
+        .simpanSantri(payload);
+    }
+
+    function handleHapusSantri(id) {
+      setGlobalLoader(true, "Menghapus...");
+      google.script.run
+        .withSuccessHandler((res) => {
+          setGlobalLoader(false);
+          if (res && res.sukses) { showToast(res.pesan); loadDaftarSantriSesi(); }
+          else showToast(res ? res.pesan : "Gagal", "error");
+        })
+        .hapusSantri({ token: state.userToken, id_santri: id });
+    }
+
+    /* ==========================================================================
+       REKAP BULANAN & SEMESTER (ADMIN ONLY)
+       ========================================================================== */
+    function handleToggleFilterJenis() {
+      const j = document.getElementById('rekap-jenis').value;
+      if (j === 'bulanan') {
+        document.getElementById('container-rekap-bulan').classList.remove('hidden');
+        document.getElementById('container-rekap-semester').classList.add('hidden');
+      } else {
+        document.getElementById('container-rekap-bulan').classList.add('hidden');
+        document.getElementById('container-rekap-semester').classList.remove('hidden');
+      }
+    }
+
+    function prosesGenerateLaporan() {
+      const jenis = document.getElementById('rekap-jenis').value;
+      const bulan = document.getElementById('rekap-bulan').value;
+      const semester = document.getElementById('rekap-semester').value;
+      const tahun = document.getElementById('rekap-tahun').value;
+      const nilai = jenis === 'bulanan' ? bulan : semester;
+
+      document.getElementById('rekap-title-render').innerText = `Rekap Presensi ${jenis === 'bulanan' ? 'Bulan Ke-' + (parseInt(bulan)+1) : 'Semester ' + semester.toUpperCase()} T.A ${tahun}`;
+      
+      const tbody = document.getElementById('table-rekap-body');
+      tbody.innerHTML = `<tr><td colspan="9" class="p-4 text-center">Menyusun Laporan...</td></tr>`;
+      setGlobalLoader(true, "Memuat laporan...");
+
+      google.script.run
+        .withSuccessHandler((res) => {
+          setGlobalLoader(false);
+          if (res && res.sukses) {
+            state.currentRekapData = res.rekapList || [];
+            let rows = '';
+            state.currentRekapData.forEach(r => {
+              rows += `<tr><td class="p-4 font-bold">${r.id_santri}</td><td class="p-4 font-bold text-slate-800">${r.nama_santri}</td><td class="p-4 font-semibold">${r.kelas}</td><td class="p-4 text-center font-bold text-emerald-600">${r.hadir}</td><td class="p-4 text-center font-bold text-amber-500">${r.sakit}</td><td class="p-4 text-center font-bold text-indigo-500">${r.izin}</td><td class="p-4 text-center font-bold text-rose-500">${r.alpa}</td><td class="p-4 text-center bg-slate-50 font-extrabold">${r.total}</td><td class="p-4 text-center font-black bg-brand-50 text-brand-700">${r.persentase}%</td></tr>`;
+            });
+            tbody.innerHTML = rows || `<tr><td colspan="9" class="p-4 text-center text-slate-400">Tidak ada rekaman presensi.</td></tr>`;
+          }
+        })
+        .ambilRekapBulananSemester({ token: state.userToken, jenis: jenis, nilai: nilai, tahun: tahun });
+    }
+
+    function eksporLaporanKeCSV() {
+      if (state.currentRekapData.length === 0) { showToast("Laporan kosong!", "error"); return; }
+      let csv = "ID,Nama,Kelas,Hadir,Sakit,Izin,Alpa,Total,Persentase\n";
+      state.currentRekapData.forEach(r => {
+        csv += `"${r.id_santri}","${r.nama_santri}","${r.kelas}",${r.hadir},${r.sakit},${r.izin},${r.alpa},${r.total},${r.persentase}\n`;
+      });
+      const link = document.createElement("a");
+      link.setAttribute("href", encodeURI("data:text/csv;charset=utf-8," + csv));
+      link.setAttribute("download", "Laporan_Madrasah.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    /* ==========================================================================
+       LOGIKA AI GEMINI (CLIENT SIDE CONTROLLER)
+       ========================================================================== */
+    function openAIModal() { document.getElementById('ai-import-modal').classList.remove('hidden'); }
+    function closeAIModal() {
+      document.getElementById('ai-import-modal').classList.add('hidden');
+      document.getElementById('ai-file-input').value = '';
+      document.getElementById('ai-text-input').value = '';
+      document.getElementById('ai-file-status').innerText = 'Klik atau seret berkas Anda di sini';
+      document.getElementById('ai-preview-container').classList.add('hidden');
+      state.temporaryAISantriStorage = [];
+    }
+
+    function handleAIFileSelection() {
+      const f = document.getElementById('ai-file-input').files[0];
+      if (f) document.getElementById('ai-file-status').innerText = ` Terpilih: ${f.name}`;
+    }
+
+    function mulaiProsesAnalisisAI() {
+      const fileInput = document.getElementById('ai-file-input');
+      const textInput = document.getElementById('ai-text-input').value.trim();
+      const file = fileInput.files[0];
+
+      if (!file && !textInput) {
+        showToast("Pilih dokumen atau masukkan teks mentah!", "error");
+        return;
+      }
+
+      document.getElementById('ai-loading-screen').classList.remove('hidden');
+      document.getElementById('ai-preview-container').classList.add('hidden');
+      document.getElementById('ai-footer-actions').classList.add('hidden');
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const base64 = e.target.result.split(',')[1];
+          panggilGeminiAI(base64, file.type, textInput);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        panggilGeminiAI(null, null, textInput);
+      }
+    }
+
+function panggilGeminiAI(base64, mime, text) {
+  jalankanScriptBackend("ekstrasiNilaiDenganAI", base64, mime, text)
+    .then((res) => {
+      document.getElementById('ai-loading-screen').classList.add('hidden');
+      document.getElementById('ai-footer-actions').classList.remove('hidden');
+      if (res && res.santri && res.santri.length > 0) {
+        state.temporaryAISantriStorage = res.santri;
+        tampilkanPreviewTabelAI(res.santri);
+      } else {
+        showToast("AI gagal mengenali data nilai.", "error");
+      }
+    })
+    .catch((err) => {
+      document.getElementById('ai-loading-screen').classList.add('hidden');
+      document.getElementById('ai-footer-actions').classList.remove('hidden');
+      showToast(err.message, "error");
+    });
+}
+
+    function tampilkanPreviewTabelAI(santri) {
+      const tbody = document.getElementById('ai-preview-table-body');
+      tbody.innerHTML = '';
+      santri.forEach(s => {
+        tbody.innerHTML += `<tr><td class="p-3 font-semibold">${s.name || s.nama}</td><td class="p-3 text-center font-bold">${s.harian ?? 0}</td><td class="p-3 text-center font-bold">${s.uas ?? 0}</td><td class="p-3 text-center font-bold">${s.kehadiran ?? 0}</td></tr>`;
+      });
+      document.getElementById('ai-preview-container').classList.remove('hidden');
+    }
+
+    function salurkanDataAI(mode) {
+      if (mode === 'overwrite' && window.targetTableOverwriteCallback) {
+        window.targetTableOverwriteCallback(state.temporaryAISantriStorage);
+      } else if (window.targetTableAppendCallback) {
+        window.targetTableAppendCallback(state.temporaryAISantriStorage);
+      }
+      showToast(`Tabel berhasil terisi.`);
+      closeAIModal();
+    }
+    // ==================== 1. JEMBATAN PINTAR GITHUB TO APPS SCRIPT ====================
+const URL_BACKEND_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbwwYVypvuZufCBXqOpTEhTnWmA4A4NNEIUVYFhh4wsRKmk4VCyBJJ0i3WTLVKz1WpS2/exec";
+
+function jalankanScriptBackend(namaFungsi, ...args) {
+  return new Promise((resolve, reject) => {
+    fetch(URL_BACKEND_APPS_SCRIPT, {
+      method: "POST",
+      body: JSON.stringify({
+        fungsi: namaFungsi,
+        argumen: args
+      })
+    })
+    .then(res => {
+      if (!res.ok) throw new Error("Koneksi ke server backend gagal.");
+      return res.json();
+    })
+    .then(data => {
+      if (data.sukses) {
+        resolve(data.hasil);
+      } else {
+        reject(new Error(data.error || "Terjadi kesalahan di server."));
+      }
+    })
+    .catch(err => {
+      console.error("Error Fetch:", err);
+      reject(err);
+    });
+  });
+}
+
+// ==================== 2. PERBAIKAN FUNGSI KAMARA (ANTI KOTAK HITAM) ====================
+function startQRScanner() {
+  if (!state.qrScanner) {
+    state.qrScanner = new Html5Qrcode("reader");
+  }
+  
+  const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+
+  // Metode brutal: Kita tidak pakai facingMode, kita langsung ambil list perangkat
+  Html5Qrcode.getCameras().then(devices => {
+    if (devices && devices.length > 0) {
+      // 🚨 Kebanyakan HP menaruh kamera belakang di urutan index 1 (kedua)
+      // Kalau index 1 gak ada/error, dia bakal balik ke index 0 (kamera depan)
+      let cameraId = devices.length > 1 ? devices[1].id : devices[0].id;
+      
+      state.qrScanner.start(cameraId, config, onQrCodeSuccess, onQrCodeError)
+        .then(() => console.log("Kamera aktif dengan ID:", cameraId))
+        .catch(err => {
+          console.error("Gagal start, mencoba index 0...", err);
+          state.qrScanner.start(devices[0].id, config, onQrCodeSuccess, onQrCodeError);
+        });
+    } else {
+      showToast("Kamera tidak ditemukan!", "error");
+    }
+  }).catch(err => {
+    // Kalau getCameras() diblokir, balik ke cara lama yang paling stabil
+    state.qrScanner.start({ facingMode: "environment" }, config, onQrCodeSuccess, onQrCodeError);
+  });
+}
+
   </script>
 </body>
-  </html>
+</html>
